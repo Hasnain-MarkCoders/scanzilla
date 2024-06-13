@@ -1,0 +1,15 @@
+*, :root, html, body{
+  margin: 0 ;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: clashdisplay;
+  src: url("./assets/fonts/ClashDisplay.ttf");
+}
+
+@font-face {
+  font-family: Segoe;
+  src: url("./assets/fonts/Segoe UI.woff");
+}
