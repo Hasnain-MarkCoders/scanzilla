@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import backgrund from "./../../assets/images/login logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -7,7 +7,10 @@ import { handleSnackAlert } from "../../Redux/Slice/SnackAlertSlice/SnackAlertSl
 import CustomTextField from "../../Components/CustomInputField/CustomInputField";
 import { LoginUser } from "../../Endpoints/Endpoints";
 import { handleAuth } from "../../Redux/Slice/UserSlice/UserSlice";
+import axiosInstance from "./../../Hooks/useQueryGallery/AuthHook/AuthHook";
+import Loader from "../../Components/Loader/Loader";
 
+const appUrl= import.meta.env.VITE_REACT_APP_API_URL
 const Login = () => {
   const [data, setData] = useState({
     email: "",
@@ -17,7 +20,9 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false)
   const auth = useSelector((state) => state.auth);
+  const inputRef = useRef(null)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   if (auth?.authenticated) {
@@ -25,54 +30,67 @@ const Login = () => {
     return <Navigate to="/text-analyze" replace={true} />;
   }
 
-  const hanldeInput = (e) => {
+  const handleInput = (e) => {
     setData((prev) => ({ ...prev, [e?.target?.name]: e?.target?.value }));
   };
-  const handleErrors = (errors = {}) => {
-    console.log(errors);
-    const errorData = [];
-    for (let key in errors) {
-      if (errors[key]) {
-        errorData.push({ key: errors[key] });
-        setErrors((prev) => ({ ...prev, [key]: errors[key] }));
-      }
-    }
-  };
-  useEffect(() => {
-    handleErrors(data);
-    console.log(errors);
-  }, [data]);
-  const hanldeLogin = async () => {
+  const handleLogin = async () => {
+    setIsLoading(true)
+
+    setErrors({password:"",email:""})
+
     try {
-      const response = await LoginUser(data);
-      console.log(response);
-      const responseData = {
-        user: response?.user,
-        accessToken: response?.accessToken,
-        refreshToken: response?.refreshToken,
-        authenticated: true,
-      };
-      dispatch(handleAuth(responseData));
-      dispatch(
-        handleSnackAlert({
-          open: true,
-          message: response.message,
-          severity: "success",
-        })
-      );
-      navigate("/text-analyze");
-      sessionStorage.setItem("accessToken", response?.accessToken);
-      sessionStorage.setItem("refreshToken", response?.refreshToken);
+      let response = await axiosInstance({url:appUrl+"/login", method:"post", data:data});
+      response = response?.data
+      console.log(response)
+        const responseData = {
+          user: response?.user,
+          accessToken: response?.accessToken,
+          refreshToken: response?.refreshToken,
+          authenticated: true,
+        };
+        dispatch(handleAuth(responseData));
+        dispatch(
+          handleSnackAlert({
+            open: true,
+            message: response.message,
+            severity: "success",
+          })
+        );
+        setIsLoading(false)
+
+        navigate("/text-analyze");
+        sessionStorage.setItem("accessToken", response?.accessToken);
+        sessionStorage.setItem("refreshToken", response?.refreshToken);
+     
     } catch (error) {
+      const errorData = error.response.data
+      if(error.response.data.errorType.includes("email")){
+        setErrors({password:"",email:error.response.data.message})
+      }
+      if(error.response.data.errorType.includes("password")){
+        setErrors({email:"",password:error.response.data.message})
+      }
+      setIsLoading(false)
+
       return dispatch(
         handleSnackAlert({
           open: true,
-          message: error.message,
+          message: errorData?.message,
           severity: "error",
         })
       );
+
     }
   };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+  useEffect(()=>{
+    inputRef?.current?.focus()
+  },[])
   return (
     <Box
       sx={{
@@ -140,27 +158,48 @@ const Login = () => {
           </Typography>
 
           <CustomTextField
+          ref={inputRef}
+          handleKeyDown={handleKeyDown}
             error={errors?.email}
-            onChange={hanldeInput}
+            onChange={handleInput}
             name={"email"}
             value={data.email}
             rows={1}
             label="Email"
           />
           <CustomTextField
+          handleKeyDown={handleKeyDown}
             error={errors?.password}
-            onChange={hanldeInput}
+            onChange={handleInput}
             name={"password"}
             value={data.password}
             rows={1}
             label="Password"
           />
 
+<Box sx={{
+            position:"relative"
+          }}>
+
+{ isLoading?<Box sx={{
+            position:"absolute",
+            background:"black",
+
+            height:"100%",
+            width:"100%",
+            display:"grid",
+            placeContent:"center",
+            borderRadius: "10px",
+            zIndex:2
+          }}>
+          <Loader/>
+          </Box>:null}
           <Button
             sx={{
               p: "15px 20px",
               borderRadius: "10px",
               background: "#010115",
+              width:"100%",
               fontSize: "18px",
               fontWeight: "500",
               "&:hover": {
@@ -168,11 +207,13 @@ const Login = () => {
               },
             }}
             variant="contained"
-            onKeyDown={(e) => console.log(e)}
-            onClick={hanldeLogin}
+            handleKeyDown={(e) => console.log(e)}
+            onClick={handleLogin}
           >
             Login
           </Button>
+</Box>
+
         </Box>
       </Box>
       <Box

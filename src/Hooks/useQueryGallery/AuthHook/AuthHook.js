@@ -26,10 +26,11 @@ axiosInstance.interceptors.response.use(
     async error => {
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
+            console.log("hi")
             originalRequest._retry = true;
             try {
                 const refreshToken=sessionStorage.getItem("refreshToken")
-                const response = await axios.post(`${appUrl}/api/auth/token`, {refreshToken}, { withCredentials: true });
+                const response = await axios.post(`${appUrl}/token`, {refreshToken}, { withCredentials: true });
 
                 
                 if (response.status === 200) {

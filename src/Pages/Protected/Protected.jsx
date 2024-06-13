@@ -6,7 +6,6 @@ import { handleSnackAlert } from '../../Redux/Slice/SnackAlertSlice/SnackAlertSl
 const Protected = ({children}) => {
     const auth = useSelector(state=>state?.auth)
     const dispatch = useDispatch()
-    console.log(auth)
     if(!auth?.authenticated){
         dispatch(handleSnackAlert({open:true, message:"You're not Authorized, Login first.", severity:"error"}))
             return <Navigate to="/" replace={true} />
