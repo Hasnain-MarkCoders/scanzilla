@@ -305,7 +305,6 @@ const Login = () => {
             <Button
               sx={{
                 p: "15px 20px",
-                borderRadius: "10px",
                 background: "linear-gradient(to right, #1A0049, #41016C)",
                 width: "100%",
                 height: "56px",
@@ -332,7 +331,6 @@ const Login = () => {
             <Button
               sx={{
                 p: "15px 20px",
-                borderRadius: "10px",
                 background: "white",
                 width: "100%",
                 height: "56px",
