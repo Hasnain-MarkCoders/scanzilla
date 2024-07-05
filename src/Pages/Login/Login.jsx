@@ -78,6 +78,10 @@ const Login = () => {
       navigate("/text-analyze");
       sessionStorage.setItem("accessToken", response?.accessToken);
       sessionStorage.setItem("refreshToken", response?.refreshToken);
+      setData({
+        email: "",
+        password: "",
+    });
 
     } catch (error) {
       const errorData = error.response.data
@@ -109,103 +113,52 @@ const Login = () => {
     inputRef?.current?.focus()
   }, [])
   return (
-    <Box
-      sx={{
-        boxSizing: "border-box",
-        // m: {
-        //   sm: "50px auto",
-        //   md: "auto",
-        // },
-        fontFamily: "Poppins",
-        width: {
-          xs: "100vw",
-          sm: "100vw",
-          md: "100%",
-        },
-        height: {
-          height: "100vh",
-        },
 
-        p: {
-          // xs: "50px 30px",
-          // sm: "50px 50px",
-          md: "20px 20px",
-        },
-        maxWidth: "1440px",
-        margin: "0 auto",
-        // background: "blue",
-        
-        display: "flex",
-        justifyContent: "space-between",
-        flexDirection: {
-          md: "row",
-          xs: "column",
-        },
-        minWidth: {
-          md: "400px"
-        }
-      }}
+    <Box
     >
       <Box
         sx={{
-          flexBasis: {
-            xs: "50%",
-          },
-          flexShrink: "1",
-          flexGrow: "0",
-          p: {
-            // lg: "80px 130px",
-            md: "80px 50px",
-            xs: "80px 50px"
-
-          }
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: "10px",
         }}
       >
-        <Box
+        <Typography
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
-            gap: "10px",
+            gap: "10px"
           }}
         >
           <Typography
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px"
+
+              color: "#1B004D",
+              lineHeight: "36.9px",
+              fontSize: "40px",
+              fontWeight: "600",
             }}
           >
-
-
-            <Typography
-              sx={{
-
-                color: "#1B004D",
-                lineHeight: "36.9px",
-                fontSize: "40px",
-                fontWeight: "600",
-              }}
-            >
-              Sign in
-            </Typography>
-            <Typography
-              sx={{
-                color: "#A0A4A9",
-                fontSize: "1rem",
-                fontWeight: "400",
-              }}
-            >
-              Welcome back! Please enter your details.
-            </Typography>
+            Sign in
           </Typography>
-          <Box
-          sx={{
-            display:"flex",
-            flexDirection:"column",
-            gap:"30px"
-          }}
+          <Typography
+            sx={{
+              color: "#A0A4A9",
+              fontSize: "1rem",
+              fontWeight: "400",
+            }}
           >
+            Welcome back! Please enter your details.
+          </Typography>
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "30px"
+          }}
+        >
           <Typography
             sx={{
               display: "flex",
@@ -254,172 +207,153 @@ const Login = () => {
               rows={1}
             />
           </Typography>
-          </Box>
+        </Box>
+        <Box
+          sx={{
+            // display: "flex",
+            display: "flex  ",
+            alignItems: "center",
+            justifyContent: "space-between",
+
+          }}
+        >
           <Box
             sx={{
-              // display: "flex",
-              display: "none  ",
+              display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
-
             }}
           >
-            <Typography
+            <Checkbox
               sx={{
-                display: "flex",
-                alignItems: "center",
-
+                color: blue[800], // set the color of the checkbox
+                '&.Mui-checked': {
+                  color: blue[900], // set the color when checked
+                },
               }}
-            >
-              <Checkbox
-                sx={{
-                  color: blue[800], // set the color of the checkbox
-                  '&.Mui-checked': {
-                    color: blue[900], // set the color when checked
-                  },
-                }}
-              />
-              <p
-                style={{
-                  color: "#333333",
-                  fontWeight: "400",
-                  fontSize: "16px"
-                }}
-              >Remember Me</p>
-            </Typography>
+            />
             <Typography
               sx={{
                 color: "#333333",
                 fontWeight: "400",
-              }}
-            >Forgot Password</Typography>
-          </Box>
-          <Box sx={{
-            position: "relative",
-            marginTop: "80px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1.56rem",
-            // border:"2px solid red"
-          }}>
-            <Button
-              sx={{
-                p: "15px 20px",
-                background: "linear-gradient(to right, #1A0049, #41016C)",
-                width: "100%",
-                height: "56px",
-                borderRadius: "32px",
-                fontSize: {
-                  xs:"14px",
-                  sm:"18px"
+                fontSize: "16px",
+                "&:hover": { // move hover styles here
+                  color: "red",
                 },
-                fontWeight: "500",
-                textTransform: "none",
-                transition: "background 0.9s ease, color 0.4s ease",
-                "&:hover": {
-                  background: "linear-gradient(to right, #1G1947, #41016C)",
-                  color: "white"
-                },
-                boxShadow: "none"
               }}
-              variant="contained"
-              onClick={handleLogin}
             >
-              {isLoading ? <LoaderW /> : "Sign in"}
-            </Button>
+              Remember Me
+            </Typography>
+          </Box>
+          <Typography
+            sx={{
+              color: "#333333",
+              fontWeight: "400",
+              cursor: "pointer",
 
-            <Button
-              sx={{
-                p: "15px 20px",
-                background: "white",
-                width: "100%",
-                height: "56px",
-                borderRadius: "32px",
-                fontSize: {
-                  xs:"14px",
-                  sm:"18px"
-                },
-                fontWeight: "500",
-                textTransform: "none",
-                transition: "background 0.9s ease, color 0.4s ease",
-                "&:hover": {
-                  background: "linear-gradient(to right, #1A0049, #41016C)",
-                  color: "white"
-                },
-                boxShadow: "none",
-                border: "1px solid grey",
-                color: "black"
-              }}
-              variant="contained"
-              // onClick={handleLogin}
-            >
-              <span style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                <img src={GoogleIcon} alt="Google Icon" style={{ height: "40px" }} />
-                <span>Sign in With Google</span>
-              </span>
-            </Button>
-          </Box>
-          <Box
-          
+            }}
+          ><NavLink to="otp" >Forgot Password</NavLink></Typography>
+        </Box>
+        <Box sx={{
+          position: "relative",
+          marginTop: "80px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1.56rem",
+          // border:"2px solid red"
+        }}>
+          <Button
+            sx={{
+              p: "15px 20px",
+              background: "linear-gradient(to right, #1A0049, #41016C)",
+              width: "100%",
+              height: "56px",
+              borderRadius: "32px",
+              fontSize: {
+                xs: "14px",
+                sm: "18px"
+              },
+              fontWeight: "500",
+              textTransform: "none",
+              transition: "background 0.9s ease, color 0.4s ease",
+              "&:hover": {
+                background: "linear-gradient(to right, #1G1947, #41016C)",
+                color: "white"
+              },
+              boxShadow: "none"
+            }}
+            variant="contained"
+            onClick={handleLogin}
+          >
+            {isLoading ? <LoaderW /> : "Sign in"}
+          </Button>
+
+          <Button
+            sx={{
+              p: "15px 20px",
+              background: "white",
+              width: "100%",
+              height: "56px",
+              borderRadius: "32px",
+              fontSize: {
+                xs: "14px",
+                sm: "18px"
+              },
+              fontWeight: "500",
+              textTransform: "none",
+              transition: "background 0.9s ease, color 0.4s ease",
+              "&:hover": {
+                background: "linear-gradient(to right, #1A0049, #41016C)",
+                color: "white"
+              },
+              boxShadow: "none",
+              border: "1px solid grey",
+              color: "black"
+            }}
+            variant="contained"
+          // onClick={handleLogin}
+          >
+            <span style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+              <img src={GoogleIcon} alt="Google Icon" style={{ height: "40px" }} />
+              <span>Sign in With Google</span>
+            </span>
+          </Button>
+        </Box>
+        <Box
+
           sx={{
-            display:"flex",
+            display: "flex",
             // border:"2px solid red",
-            alignItems:"center",
-            gap:"4px",
-            justifyContent:"center",
-            marginTop:"40px"
+            alignItems: "center",
+            gap: "4px",
+            justifyContent: "center",
+            marginTop: "40px"
           }}>
-            <Typography
+          <Typography
             sx={{
               fontSize: {
-                xs:"12px",
-                sm:"18px"
+                xs: "12px",
+                sm: "18px"
               },
-              color:"#A0A4A9",
+              color: "#A0A4A9",
             }}
-            >Don’t have an account? </Typography>
-            <Typography
+          >Don’t have an account? </Typography>
+          <Typography
             sx={{
-              color:"#1E004D",
-              textDecoration:"none"
+              color: "#1E004D",
+              textDecoration: "underline"
             }}
-            ><NavLink to='#'
+          ><NavLink to='signup'
             style={{
-              color:"#1E004D",
-              fontWeight:"600",
-              
+              color: "#1E004D",
+              fontWeight: "600",
+
             }}
-            >Sign Up</NavLink></Typography>
-          </Box>
-
+          >Sign Up</NavLink></Typography>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          flexBasis: {
-            lg:"600px",
-            md: "450px"
-
-          },
-          flexShrink: 0,
-          flexGrow:0,
-          display: {
-            xs: "none",
-            md: "block",
-          },
-          
-        }}
-      >
-       
-        <img
-          style={{
-            width: "100%",
-            height: "100%"
-          }}
-          src={background} alt="" />
 
       </Box>
     </Box>
+
   );
 };
 
